@@ -13,22 +13,6 @@ function getComputerChoice() {
     return (choice)
 }
 
-function getHumanChoice () {
-    let userInput = prompt("Enter: 1 (Rock) - 2 (Paper) - 3 (Scissors)")
-
-    if (userInput === "1") {
-        choice = "Rock";
-    } else if (userInput === "2") {
-        choice = "Paper";
-    } else if (userInput === "3") {
-        choice = "Scissors";
-    } else {
-        console.log("Invalid number")
-    }
-
-    return (choice)
-}
-
 function playRound(humanChoice, computerChoice, humanScore, computerScore) {
     if (humanChoice == computerChoice) {
         console.log("It's a tie!")
@@ -51,25 +35,57 @@ function playRound(humanChoice, computerChoice, humanScore, computerScore) {
     };
 }
 
+// Inicializar valores
 let humanScore = 0
 let computerScore = 0
 let humanChoice
 let computerChoice
+let roundNumber = 1
 
-for (let i=0; i<5; i++) {
-    humanChoice = getHumanChoice();
-    computerChoice = getComputerChoice();
-    console.log("Your selection was: " + humanChoice)
-    console.log("The computer selected: " + computerChoice)
-    result = playRound(humanChoice, computerChoice, humanScore, computerScore);
-    humanScore = result.humanScore;
-    computerScore = result.computerScore;
-}
 
-if (humanScore > computerScore) {
-    console.log("The winner is: Human")
-} else if (humanScore < computerScore) {
-    console.log("The winner is: Computer")
-} else {
-    console.log("There is a Tie!")
-}
+// Llamar funciones
+// Create multiple listeners for all buttons 
+const buttons = document.querySelectorAll('button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        // Numero de ronda
+        console.log("ROUND: " + (roundNumber++))
+        
+        // Obtener resultado computadora
+        computerChoice = getComputerChoice();
+        
+        // Identificar boton utilizado
+        humanChoice = button.id;
+
+        // Mostrar selecciones en consola
+        console.log("Your selection was: " + humanChoice)
+        console.log("The computer selected: " + computerChoice)
+
+        // Determinar resultado
+        result = playRound(humanChoice, computerChoice, humanScore, computerScore);
+
+        // Obtener puntajes de la funcion
+        humanScore = result.humanScore;
+        computerScore = result.computerScore;
+
+        // Determinar resultado de las rondas
+        if (humanScore > computerScore) {
+            console.log("The winner is: Human")
+        } else if (humanScore < computerScore) {
+            console.log("The winner is: Computer")
+        } else {
+            console.log("There is a Tie!")
+        }
+        
+        })
+})
+
+
+
+
+
+
+
+
+
