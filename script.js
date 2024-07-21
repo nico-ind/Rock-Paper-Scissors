@@ -15,19 +15,19 @@ function getComputerChoice() {
 
 function playRound(humanChoice, computerChoice, humanScore, computerScore) {
     if (humanChoice == computerChoice) {
-        console.log("It's a tie!")
+        resultP.textContent = "It's a tie!";
     } else if (humanChoice == "Rock" && computerChoice == "Scissors" ||
                humanChoice == "Scissors" && computerChoice == "Paper" ||
                humanChoice == "Paper" && computerChoice == "Rock"
     ) {
-        console.log(`You win! ${humanChoice} beats ${computerChoice}.`)
+        resultP.textContent = `You win! ${humanChoice} beats ${computerChoice}.`;
         humanScore++
     } else {
-        console.log(`You loose! ${computerChoice} beats ${humanChoice}.`)
+        resultP.textContent = `You loose! ${computerChoice} beats ${humanChoice}.`;
         computerScore++
     }
 
-    console.log("Score: Human: " + humanScore + " Computer: " + computerScore)
+    currentScore.textContent = "Score: Human: " + humanScore + " Computer: " + computerScore;
 
     return {
         humanScore, 
@@ -44,13 +44,28 @@ let roundNumber = 1
 
 
 // Llamar funciones
+
+// Get reference to the container div and p elements that exists in the html
+const container = document.querySelector('#container');
+const round = document.querySelector('#round');
+const playerSelection = document.querySelector('#playerSelection');
+const computerSelection = document.querySelector('#computerSelection');
+const resultP = document.querySelector('#resultP');
+const currentScore = document.querySelector('#currentScore');
+const endgameResult = document.querySelector('#endgameResult');
+endgameResult.style.fontSize = 'x-large';
+
 // Create multiple listeners for all buttons 
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
+        // Reset de endgameResult
+        if (humanScore === 0 && computerScore === 0) {
+            endgameResult.textContent = '';
+        }
         // Numero de ronda
-        console.log("ROUND: " + (roundNumber++))
+        round.textContent = "ROUND: " + (roundNumber++);
         
         // Obtener resultado computadora
         computerChoice = getComputerChoice();
@@ -59,8 +74,8 @@ buttons.forEach((button) => {
         humanChoice = button.id;
 
         // Mostrar selecciones en consola
-        console.log("Your selection was: " + humanChoice)
-        console.log("The computer selected: " + computerChoice)
+        playerSelection.textContent = "Your selection was: " + humanChoice;
+        computerSelection.textContent = "The computer selected: " + computerChoice;
 
         // Determinar resultado
         result = playRound(humanChoice, computerChoice, humanScore, computerScore);
@@ -69,16 +84,19 @@ buttons.forEach((button) => {
         humanScore = result.humanScore;
         computerScore = result.computerScore;
 
-        // Determinar resultado de las rondas
-        if (humanScore > computerScore) {
-            console.log("The winner is: Human")
-        } else if (humanScore < computerScore) {
-            console.log("The winner is: Computer")
-        } else {
-            console.log("There is a Tie!")
+        // Determinar resultado de la partida para un x numero de rondas
+        if (humanScore === 5 || computerScore === 5) {
+            if (humanScore > computerScore) {
+                endgameResult.textContent = "The winner is: Human";
+            } else if (humanScore < computerScore) {
+                endgameResult.textContent = "The winner is: Computer";
+            } 
+
+            // Reset scores for new round
+            humanScore = 0;
+            computerScore = 0;
         }
-        
-        })
+    })
 })
 
 
